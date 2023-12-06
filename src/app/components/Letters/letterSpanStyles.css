@@ -1,0 +1,24 @@
+/* Animate a rectagular shadow typing effect. */
+
+.LetterSpan {
+  background-color: white;
+  color: white;
+  animation-name: typewriter;
+  animation-duration: 200ms;
+  animation-fill-mode: forwards;
+}
+
+@keyframes typewriter {
+  from {
+    background-color: black;
+    color: black;
+  }
+  to {
+    background-color: white;
+    color: black;
+  }
+}
+
+.HiddenElement {
+  visibility: hidden;
+}
