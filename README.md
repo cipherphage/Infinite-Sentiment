@@ -30,6 +30,8 @@ Note: this app runs entirely client-side and runs machine learning models right 
 
 ## Sample pictures of the simple UI:
 
+![Infinite Sentiment Example 3](InfiniteSentimentEx3.png)
+
 ![Infinite Sentiment Example 1](InfiniteSentimentEx1.png)
 
 ![Infinite Sentiment Example 2](InfiniteSentimentEx2.png)

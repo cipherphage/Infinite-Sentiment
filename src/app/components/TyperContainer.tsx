@@ -11,11 +11,9 @@ interface TyperProps {
 }
 
 export default function Typer({ word, subtitle, isLoading, message }: TyperProps) {
-  const [mainLetterSpan, setMainLetterSpan] = useState<JSX.Element>(
-    <span key="init1"></span>);
+  const [mainLetter, setMainLetter] = useState<string>('');
   const [mainLetterMap, setMainLetterMap] = useState<Map<number, string>>(new Map);
-  const [subLetterSpan, setSubLetterSpan] = useState<JSX.Element>(
-    <span key="init2"></span>);
+  const [subLetter, setSubLetter] = useState<string>('');
   const [subLetterMap, setSubLetterMap] = useState<Map<number, string>>(new Map);
 
   // After ip is loaded create Map of letters.
@@ -30,7 +28,7 @@ export default function Typer({ word, subtitle, isLoading, message }: TyperProps
         setMainLetterMap(newMainMap);
       }
       // Check letterSpan default to ensure existing letters aren't duplicated.
-      if ((mainLetterMap.size > 0) && (mainLetterSpan.key === 'init1')) {
+      if ((mainLetterMap.size > 0) && (mainLetter === '')) {
         typewriter();
       }
     }
@@ -38,16 +36,16 @@ export default function Typer({ word, subtitle, isLoading, message }: TyperProps
 
   // Creates LetterSpans one at a time with typing timeout effect.
   const typewriter = async () => {
-    for (const [i, letter] of mainLetterMap) {
+    for (const letter of mainLetterMap.values()) {
       await typerPauseRandom();
-      const newLetterSpan = <LetterSpan k={i+letter} letter={letter} />;
-      setMainLetterSpan(newLetterSpan);
+      const newLetter = letter; // this causes duplicate letters to be dropped
+      setMainLetter(newLetter); // TODO: make this an object with key matching map?
     }
 
-    for (const [i, letter] of subLetterMap) {
+    for (const letter of subLetterMap.values()) {
       await typerPauseRandom();
-      const newLetterSpan = <LetterSpan k={i+letter} letter={letter} />;
-      setSubLetterSpan(newLetterSpan);
+      const newLetter = letter;
+      setSubLetter(newLetter);
     }
   };
 
@@ -57,11 +55,11 @@ export default function Typer({ word, subtitle, isLoading, message }: TyperProps
 
       {!isLoading && <h3 className="TyperMainLetterSpanner">
         { message } <span> </span>
-        <LetterSpanner key="letterspanner1" letterSpan={mainLetterSpan} />
+        <LetterSpanner key="letterspanner1" letter={mainLetter} />
       </h3>}
 
       {subtitle && <h4 className="TyperSubtitleLetterSpanner">
-        <LetterSpanner key="letterspanner2" letterSpan={subLetterSpan} />
+        <LetterSpanner key="letterspanner2" letter={subLetter} />
       </h4>}
     </div>
   );

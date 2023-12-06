@@ -1,23 +1,26 @@
-import { JSXElementConstructor, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./letterSpanStyles.css";
+import LetterSpan from "./LetterSpan";
 
 interface LetterSpannerProps {
-  letterSpan: JSX.Element;
+  letter: string;
 }
 
 export default function LetterSpanner({
-  letterSpan,
+  letter,
 }: LetterSpannerProps) {
-  const [letterSpanArray, setLetterSpanArray] = useState<JSX.Element[]>([]);
+  const [letterArray, setLetterArray] = useState<string[]>([]);
 
   useEffect(() => {
-    const newLetterSpanArray = [...letterSpanArray, letterSpan];
-    setLetterSpanArray(newLetterSpanArray);
-  }, [letterSpan]);
+    const newLetterArray = [...letterArray, letter];
+    setLetterArray(newLetterArray);
+  }, [letter]);
 
   return (
     <>
-      {letterSpanArray.map((letterSpan) => letterSpan )}
+      {letterArray.map((letter, i) => (
+        <LetterSpan key={i+letter+'-letterspan'} letter={letter} />
+      ))}
     </>
   );
 }
