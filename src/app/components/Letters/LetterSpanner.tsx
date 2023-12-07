@@ -3,7 +3,7 @@ import "./letterSpanStyles.css";
 import LetterSpan from "./LetterSpan";
 
 interface LetterSpannerProps {
-  letter: string;
+  letter: Letter;
 }
 
 export default function LetterSpanner({
@@ -12,7 +12,7 @@ export default function LetterSpanner({
   const [letterArray, setLetterArray] = useState<string[]>([]);
 
   useEffect(() => {
-    const newLetterArray = [...letterArray, letter];
+    const newLetterArray = [...letterArray, letter.letter];
     setLetterArray(newLetterArray);
   }, [letter]);
 

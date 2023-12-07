@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import LetterSpanner from "./Letters/LetterSpanner";
 import { typerPauseRandom } from "../utils/helpers";
-import LetterSpan from "./Letters/LetterSpan";
+import { defaultLetter } from "../utils/defaults";
 
 interface TyperProps {
   word: string;
@@ -11,9 +11,9 @@ interface TyperProps {
 }
 
 export default function Typer({ word, subtitle, isLoading, message }: TyperProps) {
-  const [mainLetter, setMainLetter] = useState<string>('');
+  const [mainLetter, setMainLetter] = useState<Letter>(defaultLetter);
   const [mainLetterMap, setMainLetterMap] = useState<Map<number, string>>(new Map);
-  const [subLetter, setSubLetter] = useState<string>('');
+  const [subLetter, setSubLetter] = useState<Letter>(defaultLetter);
   const [subLetterMap, setSubLetterMap] = useState<Map<number, string>>(new Map);
 
   // After ip is loaded create Map of letters.
@@ -28,7 +28,7 @@ export default function Typer({ word, subtitle, isLoading, message }: TyperProps
         setMainLetterMap(newMainMap);
       }
       // Check letterSpan default to ensure existing letters aren't duplicated.
-      if ((mainLetterMap.size > 0) && (mainLetter === '')) {
+      if ((mainLetterMap.size > 0) && (mainLetter.i === -1)) {
         typewriter();
       }
     }
@@ -36,15 +36,15 @@ export default function Typer({ word, subtitle, isLoading, message }: TyperProps
 
   // Creates LetterSpans one at a time with typing timeout effect.
   const typewriter = async () => {
-    for (const letter of mainLetterMap.values()) {
+    for (const [i, letter] of mainLetterMap) {
       await typerPauseRandom();
-      const newLetter = letter; // this causes duplicate letters to be dropped
-      setMainLetter(newLetter); // TODO: make this an object with key matching map?
+      const newLetter: Letter = {'i': i, 'letter': letter};
+      setMainLetter(newLetter);
     }
 
-    for (const letter of subLetterMap.values()) {
+    for (const [i, letter] of subLetterMap) {
       await typerPauseRandom();
-      const newLetter = letter;
+      const newLetter: Letter = {'i': i, 'letter': letter};
       setSubLetter(newLetter);
     }
   };
