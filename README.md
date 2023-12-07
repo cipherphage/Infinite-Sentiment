@@ -41,9 +41,10 @@ Note: this app runs entirely client-side and runs machine learning models right 
 
 ## Bugs
 
-- Browser caching has been turned off in transformers.js (`env.userBrowserCache = false`), because transformers.js is having an issue handling 404 responses when fetching model files. I commented on their Github repo and also made a StackOverflow post:
+- Browser caching has been turned off in transformers.js (`env.userBrowserCache = false`), because transformers.js is having an issue handling 404 responses when fetching model files in the Brave browser. I commented on their Github repo and also made a StackOverflow post:
   - [https://github.com/xenova/transformers.js/issues/366](https://github.com/xenova/transformers.js/issues/366)
   - [https://stackoverflow.com/questions/77614213/transformer-js-model-fails-to-parse-json-in-client-side-next-js-example/77614214#77614214](https://stackoverflow.com/questions/77614213/transformer-js-model-fails-to-parse-json-in-client-side-next-js-example/77614214#77614214)
+  - Note: this doesn't seem to be a problem on the latest version of Chrome I tried, `Version 120.0.6099.62 (Official Build) (x86_64)`, only on Brave: `Version 1.61.101 Chromium: 120.0.6099.71 (Official Build) (x86_64)`.
   
 - The text in `public/ij.txt` is not well formatted and contains inappropriate linebreaks through-out. I use a simple regex to parse it and put the passages into an array, then randomly pull one element out of the array. While this is not exactly a bug, it's all very rough and inconsistent and in need of refinement, both in terms of the text and the parser. This is the regex:
   - `/[.!'"?](?=[\s]+[\n]+[\s]+)/g`
