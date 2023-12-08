@@ -1,11 +1,15 @@
-export const testUrl = "https://httpbin.org/ip";
+import { defaultSentiment } from "./defaults";
+import { getPassagesArrayFromRawTextArray, getRawTextArrayFromString } from "./helpers";
+
+// export const testUrl = "https://httpbin.org/ip";
 export const ijFilePath = "ij.txt";
 
-const fetchJSON = async (url: string) => {
-  const res = await fetch(url);
-  const resj = await res.json();
-  return resj;
-}
+// Fetch json from a URL.
+// const fetchJSON = async (url: string) => {
+//   const res = await fetch(url);
+//   const resj = await res.json();
+//   return resj;
+// }
 
 // Fetch client IP address for testing purposes.
 // export const fetchTheIp = async (url: string) => {
@@ -13,16 +17,17 @@ const fetchJSON = async (url: string) => {
 //   return j?.origin;
 // };
 
-const fetchRandomTextFromFile = async (file: string) => {
+const fetchStringFromTextFile = async (file: string) => {
   const res = await fetch(file);
-  const rest = (await res.text()).split(
-    /[.!'"?](?=[\s]+[\n]+[\s]+)/g
-  ).map(el => el.trim());
-  const randNum = Math.floor(Math.random() * rest.length);
-  return rest[randNum];
+  const rest = await res.text();
+  return rest;
 }
 
 export const fetchIJQuote = async (file: string) => {
-  const j = await fetchRandomTextFromFile(file);
-  return { 'q': '"'+j+'"', 'a': '- David Foster Wallace, Infinite Jest' };
+  const j = await fetchStringFromTextFile(file);
+  const rawTextArray = getRawTextArrayFromString(j);
+  const passagesArray: TextPassage[] = getPassagesArrayFromRawTextArray(
+    rawTextArray,'- David Foster Wallace, Infinite Jest');
+
+  return passagesArray;
 };

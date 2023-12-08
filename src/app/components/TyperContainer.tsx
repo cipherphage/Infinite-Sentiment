@@ -8,15 +8,17 @@ interface TyperProps {
   subtitle: string;
   isLoading: boolean;
   message: string;
+  classes: string;
+  typingStatus: boolean;
 }
 
-export default function Typer({ word, subtitle, isLoading, message }: TyperProps) {
+export default function Typer({ word, subtitle, isLoading, message, classes, typingStatus }: TyperProps) {
   const [mainLetter, setMainLetter] = useState<Letter>(defaultLetter);
   const [mainLetterMap, setMainLetterMap] = useState<Map<number, string>>(new Map);
   const [subLetter, setSubLetter] = useState<Letter>(defaultLetter);
   const [subLetterMap, setSubLetterMap] = useState<Map<number, string>>(new Map);
 
-  // After ip is loaded create Map of letters.
+  // After word is loaded create Map of letters.
   useEffect(() => {
     if (!isLoading) {
       if (mainLetterMap.size === 0) {
@@ -53,13 +55,13 @@ export default function Typer({ word, subtitle, isLoading, message }: TyperProps
     <div className="TyperContainer">
       {isLoading && <h2 className="TyperLoadingTitle">{ message }</h2>}
 
-      {!isLoading && <h3 className="TyperMainLetterSpanner">
+      {!isLoading && <h3 className={`TyperMainLetterSpanner ${classes}`}>
         { message } <span> </span>
-        <LetterSpanner key="letterspanner1" letter={mainLetter} />
+        { typingStatus ? <LetterSpanner letter={mainLetter} /> : <>{word}</> }
       </h3>}
 
       {subtitle && <h4 className="TyperSubtitleLetterSpanner">
-        <LetterSpanner key="letterspanner2" letter={subLetter} />
+        { typingStatus ? <LetterSpanner letter={subLetter} /> : <>{subtitle}</> }
       </h4>}
     </div>
   );
