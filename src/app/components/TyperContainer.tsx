@@ -9,10 +9,9 @@ interface TyperProps {
   isLoading: boolean;
   message: string;
   classes: string;
-  typingStatus: boolean;
 }
 
-export default function Typer({ word, subtitle, isLoading, message, classes, typingStatus }: TyperProps) {
+export default function Typer({ word, subtitle, isLoading, message, classes }: TyperProps) {
   const [mainLetter, setMainLetter] = useState<Letter>(defaultLetter);
   const [mainLetterMap, setMainLetterMap] = useState<Map<number, string>>(new Map);
   const [subLetter, setSubLetter] = useState<Letter>(defaultLetter);
@@ -57,11 +56,11 @@ export default function Typer({ word, subtitle, isLoading, message, classes, typ
 
       {!isLoading && <h3 className={`TyperMainLetterSpanner ${classes}`}>
         { message } <span> </span>
-        { typingStatus ? <LetterSpanner letter={mainLetter} /> : <>{word}</> }
+        <LetterSpanner letter={mainLetter} />
       </h3>}
 
       {subtitle && <h4 className="TyperSubtitleLetterSpanner">
-        { typingStatus ? <LetterSpanner letter={subLetter} /> : <>{subtitle}</> }
+        <LetterSpanner letter={subLetter} />
       </h4>}
     </div>
   );

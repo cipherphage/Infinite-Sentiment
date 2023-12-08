@@ -1,3 +1,5 @@
+export const defaultTitle: string = 'Infinite Sentiment';
+
 export const defaultLetter: Letter = {
     'i': -1,
     'letter': ''

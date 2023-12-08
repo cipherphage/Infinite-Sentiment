@@ -7,7 +7,7 @@ interface LetterSpannerProps {
 }
 
 export default function LetterSpanner({
-  letter,
+  letter
 }: LetterSpannerProps) {
   const [letterArray, setLetterArray] = useState<string[]>([]);
 

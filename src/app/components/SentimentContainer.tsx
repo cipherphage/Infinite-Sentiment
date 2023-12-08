@@ -6,7 +6,7 @@ interface SentimentContProps {
   isLoading: boolean;
 }
 
-export default function SentimentContainer({ text, isLoading }: SentimentContProps) {
+export default function Sentiment({ text, isLoading }: SentimentContProps) {
   const [label, setLabel] = useState('');
   const [score, setScore] = useState(0);
   // Keep track of the classification model name and loading status.
@@ -39,6 +39,7 @@ export default function SentimentContainer({ text, isLoading }: SentimentContPro
           setReady(true);
           break;
         case 'complete':
+          setReady(true);
           setLabel(e.data.output[0].label);
           setScore(e.data.output[0].score);
           break;
@@ -49,13 +50,18 @@ export default function SentimentContainer({ text, isLoading }: SentimentContPro
     worker.current.addEventListener('message', onMessageReceived);
 
     if (!isLoading) {
+      // Perform state reset before calling classifier.
+      setLabel('');
+      setScore(0);
+      setReady(false);
+
       classify(text);
     }
 
     // Define a cleanup function for when the component is unmounted.
     return () => worker.current?.removeEventListener('message', onMessageReceived);
 
-  }, [isLoading]);
+  }, [isLoading, text]);
 
   const classify = useCallback((t: string) => {
     if (worker.current) {

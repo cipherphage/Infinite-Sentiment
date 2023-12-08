@@ -35,7 +35,7 @@ self.addEventListener('message', async (event) => {
         // track model loading.
         self.postMessage(x);
     });
-
+    
     // Actually perform the classification
     let output = await classifier(event.data.t);
 
