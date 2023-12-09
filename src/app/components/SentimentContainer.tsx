@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-// import { pipeline } from "@xenova/transformers";
 
 interface SentimentContProps {
   text: string;

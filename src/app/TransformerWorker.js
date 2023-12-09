@@ -8,7 +8,7 @@ import { pipeline, env } from "@xenova/transformers";
 
 // Skip local model check and cache
 env.allowLocalModels = false;
-env.useBrowserCache = false;
+// env.useBrowserCache = false;
 
 
 
@@ -28,6 +28,7 @@ class PipelineSingleton {
 
 // Listen for messages from the main thread
 self.addEventListener('message', async (event) => {
+    const i = event.data.i;
     // Retrieve the classification pipeline. When called for the first time,
     // this will load the pipeline and save it for future use.
     let classifier = await PipelineSingleton.getInstance(x => {
@@ -43,5 +44,6 @@ self.addEventListener('message', async (event) => {
     self.postMessage({
         status: 'complete',
         output: output,
+        index: i
     });
 });

@@ -7,39 +7,42 @@ import { fetchIJQuote, ijFilePath } from "./utils/api";
 import Sentiment from "./components/SentimentContainer";
 import { getRandomArrayElement } from "./utils/helpers";
 import { defaultTitle } from "./utils/defaults";
+import SentimentViewer from "./components/SentimentViewerContainer";
 
 export default function Home() {
     // Title and nav buttons state.
     const [title, setTitle] = useState(defaultTitle);
     const [typingStatus, setTypingStatus] = useState(true);
     // Quotes (AKA passages) state.
-    const [quote, setQuote] = useState('');
-    const [quoteArray, setQuoteArray] = useState<TextPassage[]>([]);
+    const [passage, setPassage] = useState('');
+    const [passageArray, setPassageArray] = useState<TextPassage[]>([]);
+    const [textArray, setTextArray] = useState<string[]>([]);
     const [author, setAuthor] = useState('');
-    const [qIsLoading, setQIsLoading] = useState(true);
-    const [qMessage, setQMessage] = useState(
+    const [pIsLoading, setPIsLoading] = useState(true);
+    const [pMessage, setPMessage] = useState(
         `Loading Infinite Jest Quote from ${ijFilePath} ...`);
 
     // Load text on first mount of component.
     useEffect(() => {
-        loadQ();
+        loadP();
     }, []);
 
-    const loadQ = async () => {
+    const loadP = async () => {
         // TODO: handle http error and other edge cases.
-        const q = await fetchIJQuote(ijFilePath);
-        const randQ = getRandomArrayElement(q);
-        setQuote(randQ.passage);
-        setAuthor(randQ.author);
-        setQuoteArray(q);
-        setQMessage('');
-        setQIsLoading(false);
+        const {text, passages} = await fetchIJQuote(ijFilePath);
+        const randP = getRandomArrayElement(passages);
+        setPassage(randP.passage);
+        setAuthor(randP.author);
+        setPassageArray(passages);
+        setTextArray(text);
+        setPMessage('');
+        setPIsLoading(false);
     };
 
     // Button actions.
     const onClickGetPassage = () => {
-        const randQ = getRandomArrayElement(quoteArray);
-        setQuote(randQ.passage);
+        const randP = getRandomArrayElement(passageArray);
+        setPassage(randP.passage);
     };
 
     const onClickTypingStatus = () => {
@@ -53,7 +56,7 @@ export default function Home() {
             
                 <Typer word={title} isLoading={false} message="" subtitle="" classes="font-semibold" />
 
-                <div className="flex mb-3 text-center lg:max-w-5xl lg:w-full ">
+                <div className="flex mb-3 text-center lg:max-w-5xl lg:w-full">
                     { !typingStatus && 
                         (<button
                         className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
@@ -91,13 +94,15 @@ export default function Home() {
                 </div>
 
                 {typingStatus ? 
-                    <Typer word={quote} isLoading={qIsLoading} message={qMessage} subtitle={author} classes="" /> :
+                    <Typer word={passage} isLoading={pIsLoading} message={pMessage} subtitle={author} classes="" /> :
                 
-                    <Passage word={quote} isLoading={qIsLoading} message={qMessage} subtitle={author} classes="" />
+                    <Passage word={passage} isLoading={pIsLoading} message={pMessage} subtitle={author} classes="" />
                 }
 
                 <br/>
-                <Sentiment text={quote} isLoading={qIsLoading} />
+                <Sentiment text={passage} isLoading={pIsLoading} />
+                <br/>
+                <SentimentViewer textArray={textArray} passageArray={passageArray} isLoading={pIsLoading} />
             </div>
         </main>
     )

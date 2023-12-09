@@ -10,3 +10,9 @@ export const defaultSentiment: Sentiment = {
     score: -1,
     color: -1
 };
+
+export const defaultPassage: TextPassage = {
+    passage: '',
+    author: '',
+    sentiment: defaultSentiment
+};

@@ -1,20 +1,52 @@
+import { text } from "stream/consumers";
 import { defaultSentiment } from "./defaults";
 
 export const getRawTextArrayFromString = (s: string): string[] => {
-  return s.split(
+  const rawArray = s.split(
     /[.!'"?](?=[\s]+[\n]+[\s]+)/g
   );
+  return rawArray.filter((el) => {
+    if (el) {
+      const e = el.trim();
+      if (e) {
+        return '"' + e + '"';
+      }
+    }
+  });
 };
 
 export const getPassagesArrayFromRawTextArray = (sArray: string[], a: string): TextPassage[] => {
   return sArray.map((el) => {
     return {
-      passage: el.trim(),
+      passage: el,
       author: a,
       sentiment: defaultSentiment
     };
   });
 };
+
+export const updateSentimentOfPassage = (textOutput: Sentiment, passage: TextPassage): TextPassage => {
+  const s = passage.sentiment;
+  const c = Math.floor(textOutput.score * 100 * 2.54999);
+  return {
+    ...passage, 
+    sentiment: {
+      label: textOutput.label,
+      score: textOutput.score,
+      color: c
+    }
+  };
+};
+
+// export const updatePassagesArray = (textArray: Sentiment[], passageArray: TextPassage[]) => {
+//     return passageArray.map((el, i) => {
+//       const s = el.sentiment;
+//       const t = textArray[i];
+//       s.label = t.label;
+//       s.score = t.score;
+//       s.color = Math.floor(t.score * 100 * 2.54999);
+//     });
+// };
 
 export const typerPauseRandom = async () => {
   // Use random millisecond and power distribution (thus skewing to smaller pauses)

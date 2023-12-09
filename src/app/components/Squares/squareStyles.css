@@ -1,0 +1,11 @@
+.square-grid {
+    display: grid;
+    gap: 0.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(1%, 2%));
+}
+
+.square {
+    aspect-ratio: 1/ 1;
+    padding: 2%;
+    margin: 1%;
+}

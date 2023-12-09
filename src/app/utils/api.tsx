@@ -29,5 +29,5 @@ export const fetchIJQuote = async (file: string) => {
   const passagesArray: TextPassage[] = getPassagesArrayFromRawTextArray(
     rawTextArray,'- David Foster Wallace, Infinite Jest');
 
-  return passagesArray;
+  return {text: rawTextArray, passages: passagesArray};
 };
