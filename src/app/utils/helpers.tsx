@@ -63,9 +63,21 @@ export const getRandomArrayElement = (a: [] | TextPassage[]) => {
 
 const sortByScore = (r: boolean, a: [] | TextPassage[]): [] | TextPassage[] => {
   if (r) {
-    return a.toSorted((i, j) => j.sentiment.score - i.sentiment.score);
+    return a.toSorted((i, j) => {
+      const iLabel = i.sentiment.label === 'POSITIVE' ? true : false;
+      const jLabel = j.sentiment.label === 'POSITIVE' ? true : false;
+      const iCompare = iLabel ? i.sentiment.score : (i.sentiment.score * -1);
+      const jCompare = jLabel ? j.sentiment.score : (j.sentiment.score * -1);
+      return jCompare - iCompare;
+    });
   } else {
-    return a.toSorted((i, j) => i.sentiment.score - j.sentiment.score);
+    return a.toSorted((i, j) => {
+      const iLabel = i.sentiment.label === 'POSITIVE' ? true : false;
+      const jLabel = j.sentiment.label === 'POSITIVE' ? true : false;
+      const iCompare = iLabel ? i.sentiment.score : (i.sentiment.score * -1);
+      const jCompare = jLabel ? j.sentiment.score : (j.sentiment.score * -1);
+      return iCompare - jCompare;
+    });
   }
 };
 

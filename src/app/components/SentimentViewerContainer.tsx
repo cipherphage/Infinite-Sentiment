@@ -92,7 +92,10 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
   const onClickSortByScore = () => {
     let s = resultSort.sort;
 
-    if (resultSort.sort !== 'score') setResultSort({ ...resultSort, sort: 'score' }); s = 'score';
+    if (resultSort.sort !== 'score') {
+        setResultSort({ ...resultSort, sort: 'score' });
+        s = 'score';
+    }
 
     const reversedArray = getSortedArray(s, resultSort.reverse, updatedPassageArray);
     setUpdatedPassageArray(reversedArray);
@@ -101,7 +104,10 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
   const onClickSortByPassageLength = () => {
     let s = resultSort.sort;
 
-    if (s !== 'passageLength') setResultSort({ ...resultSort, sort: 'passageLength' }); s = 'passageLength';
+    if (s !== 'passageLength') {
+        setResultSort({ ...resultSort, sort: 'passageLength' });
+        s = 'passageLength';
+    }
 
     const reversedArray = getSortedArray(s, resultSort.reverse, updatedPassageArray);
     setUpdatedPassageArray(reversedArray);
@@ -110,7 +116,10 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
   const onClickReverseSort = () => {
     let r = resultSort.reverse;
 
-    if (!r) setResultSort({ ...resultSort, reverse: true }); r = true;
+    if (!r) {
+        setResultSort({ ...resultSort, reverse: true });
+        r = true;
+    }
 
     if (updatedPassageArray.length) {
         const reversedArray = getSortedArray(resultSort.sort, r, updatedPassageArray);
@@ -187,9 +196,7 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
         </div>
         <br/>
     </div>
-    {/* <div className="square-grid"> */}
-      <Squares updatedPassage={updatedPassage} updatedPassageArray={updatedPassageArray} />
-    {/* </div> */}
+    <Squares updatedPassage={updatedPassage} updatedPassageArray={updatedPassageArray} />
     <div>
         <br/>
         { (!done && ready) && 
