@@ -39,6 +39,10 @@ Note: this app runs entirely client-side and runs machine learning models right 
 
 ![Infinite Sentiment Example 1](InfiniteSentimentEx1.png)
 
+Here is current progress on the Sentiment Viewer branch:
+<br/>
+<img alt="Infinite Sentiment Example 4" src="./InfiniteSentimentEx4.png" width="500px" />
+
 ## Bugs
 
 - Browser caching has been turned off in transformers.js (`env.userBrowserCache = false`), because transformers.js is having an issue handling 404 responses when fetching model files in the Brave browser. I commented on their Github repo and also made a StackOverflow post:
