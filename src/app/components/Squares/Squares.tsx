@@ -1,10 +1,12 @@
 import { useEffect } from "react";
+import Passage from "../PassageContainer";
 
 interface SquareProps {
+    updatedPassage: TextPassage;
     updatedPassageArray: TextPassage[];
 }
 
-export default function Squares({ updatedPassageArray }: SquareProps) {
+export default function Squares({ updatedPassage, updatedPassageArray }: SquareProps) {
     useEffect(()=>{
         console.log(updatedPassageArray.length);
     }, [updatedPassageArray]);
@@ -16,6 +18,7 @@ export default function Squares({ updatedPassageArray }: SquareProps) {
 
     return (
         <>
+            <div className="square-grid">
             {updatedPassageArray.map((el, i) => {
                 const bc = el.sentiment.label === "POSITIVE" ?
                     `rgba(0,0,${el.sentiment.color},1)` :
@@ -34,6 +37,18 @@ export default function Squares({ updatedPassageArray }: SquareProps) {
                     </div>
                 );
             })}
+            </div>
+            <br/>
+            <Passage word={updatedPassage.passage} isLoading={false} message="" subtitle={updatedPassage.author} classes="" />
+            <br/>
+            <div>
+                <h4>
+                    `Label: ${updatedPassage.sentiment.label}`
+                </h4>
+                <h4>
+                    `Score: ${ (updatedPassage.sentiment.score * 100).toFixed(2) + "%"}`
+                </h4>
+            </div>
         </>
     );
 };

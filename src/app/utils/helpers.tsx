@@ -60,3 +60,31 @@ export const getRandomArrayElement = (a: [] | TextPassage[]) => {
   const randNum = Math.floor(Math.random() * a.length);
   return a[randNum];
 }
+
+const sortByScore = (r: boolean, a: [] | TextPassage[]): [] | TextPassage[] => {
+  if (r) {
+    return a.toSorted((i, j) => j.sentiment.score - i.sentiment.score);
+  } else {
+    return a.toSorted((i, j) => i.sentiment.score - j.sentiment.score);
+  }
+};
+
+const sortByPassageLength = (r: boolean, a: [] | TextPassage[]): [] | TextPassage[] => {
+  if (r) {
+    return a.toSorted((i, j) => j.passage.length - i.passage.length);
+  } else {
+    return a.toSorted((i, j) => i.passage.length - j.passage.length);
+  }
+};
+
+export const getSortedArray = (s: string, r: boolean, a: [] | TextPassage[]): [] | TextPassage[] => {
+  let sortedA: [] | TextPassage[] = [];
+
+  if (s === 'score') {
+    sortedA = sortByScore(r, a);
+  } else if (s === 'passageLength') {
+    sortedA = sortByPassageLength(r, a);
+  }
+
+  return sortedA;
+};

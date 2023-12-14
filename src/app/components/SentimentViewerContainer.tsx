@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Squares from "./Squares/Squares";
-import { updateSentimentOfPassage } from "../utils/helpers";
+import { getSortedArray, updateSentimentOfPassage } from "../utils/helpers";
 import "./Squares/squareStyles.css";
 import { defaultPassage } from "../utils/defaults";
 
@@ -10,10 +10,16 @@ interface SentimentViewerProps {
     isLoading: boolean;
 }
 
+type ResultSort = {
+    sort: string;
+    reverse: boolean;
+}
+
 export default function SentimentViewer({ textArray, passageArray, isLoading }: SentimentViewerProps) {
   const [index, setIndex] = useState(0);
   const [updatedPassage, setUpdatedPassage] = useState<TextPassage>(defaultPassage);
   const [updatedPassageArray, setUpdatedPassageArray] = useState<TextPassage[]>([]);
+  const [resultSort, setResultSort] = useState<ResultSort>({ sort: '', reverse: false });
   // Keep track of the classification model name and loading status.
   const [ready, setReady] = useState(false);
   const [done, setDone] = useState(false);
@@ -71,7 +77,7 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
   }, [isLoading]);
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && ready) {
       const newPA = [...updatedPassageArray, updatedPassage];
       setUpdatedPassageArray(newPA);
     }
@@ -82,6 +88,35 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
       worker.current.postMessage({ t, i });
     }
   }, []);
+
+  const onClickSortByScore = () => {
+    let s = resultSort.sort;
+
+    if (resultSort.sort !== 'score') setResultSort({ ...resultSort, sort: 'score' }); s = 'score';
+
+    const reversedArray = getSortedArray(s, resultSort.reverse, updatedPassageArray);
+    setUpdatedPassageArray(reversedArray);
+  };
+
+  const onClickSortByPassageLength = () => {
+    let s = resultSort.sort;
+
+    if (s !== 'passageLength') setResultSort({ ...resultSort, sort: 'passageLength' }); s = 'passageLength';
+
+    const reversedArray = getSortedArray(s, resultSort.reverse, updatedPassageArray);
+    setUpdatedPassageArray(reversedArray);
+  };
+
+  const onClickReverseSort = () => {
+    let r = resultSort.reverse;
+
+    if (!r) setResultSort({ ...resultSort, reverse: true }); r = true;
+
+    if (updatedPassageArray.length) {
+        const reversedArray = getSortedArray(resultSort.sort, r, updatedPassageArray);
+        setUpdatedPassageArray(reversedArray);
+    }
+  };
 
   return <>
     <div>
@@ -103,10 +138,58 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
             </h4>
         }
         <br/>
+        <div className="flex mb-3 text-center lg:max-w-5xl lg:w-full">
+            <button
+            className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            onClick={onClickSortByScore}
+            >
+                <h4 className={`mb-3 text-1xl`}>
+                    <span className="inline-block transition-transform group-hover:-translate-x-1 motion-reduce:transform-none">
+                        &lt;
+                    </span>
+                    {' '}Sort by sentiment score{' '}
+                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                        &gt;
+                    </span>
+                </h4>
+                {/* <p className={`m-0 max-w-[30ch] text-sm opacity-50`}></p> */}
+            </button>
+            <button
+            className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            onClick={onClickSortByPassageLength}
+            >
+                <h4 className={`mb-3 text-1xl`}>
+                    <span className="inline-block transition-transform group-hover:-translate-x-1 motion-reduce:transform-none">
+                        &lt;
+                    </span>
+                    {' '}Sort by passage length{' '}
+                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                        &gt;
+                    </span>
+                </h4>
+                {/* <p className={`m-0 max-w-[30ch] text-sm opacity-50`}></p> */}
+            </button>
+            <button
+            className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            onClick={onClickReverseSort}
+            >
+                <h4 className={`mb-3 text-1xl`}>
+                    <span className="inline-block transition-transform group-hover:-translate-x-1 motion-reduce:transform-none">
+                        &lt;
+                    </span>
+                    {' '}Reverse the sort{' '}
+                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                        &gt;
+                    </span>
+                </h4>
+                {/* <p className={`m-0 max-w-[30ch] text-sm opacity-50`}></p> */}
+            </button>
+        </div>
+        <br/>
     </div>
-    <div className="square-grid">
-      <Squares updatedPassageArray={updatedPassageArray} />
-    </div>
+    {/* <div className="square-grid"> */}
+      <Squares updatedPassage={updatedPassage} updatedPassageArray={updatedPassageArray} />
+    {/* </div> */}
     <div>
         <br/>
         { (!done && ready) && 
