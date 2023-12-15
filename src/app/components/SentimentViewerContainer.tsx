@@ -19,7 +19,7 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
   const [index, setIndex] = useState(0);
   const [updatedPassage, setUpdatedPassage] = useState<TextPassage>(defaultPassage);
   const [updatedPassageArray, setUpdatedPassageArray] = useState<TextPassage[]>([]);
-  const [resultSort, setResultSort] = useState<ResultSort>({ sort: '', reverse: false });
+  const [resultSort, setResultSort] = useState<ResultSort>({ sort: 'index', reverse: false });
   // Keep track of the classification model name and loading status.
   const [ready, setReady] = useState(false);
   const [done, setDone] = useState(false);
@@ -113,12 +113,27 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
     setUpdatedPassageArray(reversedArray);
   };
 
+  const onClickSortByIndex = () => {
+    let s = resultSort.sort;
+
+    if (s !== 'index') {
+        setResultSort({ ...resultSort, sort: 'index' });
+        s = 'index';
+    }
+
+    const reversedArray = getSortedArray(s, resultSort.reverse, updatedPassageArray);
+    setUpdatedPassageArray(reversedArray);
+  };
+
   const onClickReverseSort = () => {
     let r = resultSort.reverse;
 
     if (!r) {
         setResultSort({ ...resultSort, reverse: true });
         r = true;
+    } else {
+        setResultSort({ ...resultSort, reverse: false });
+        r = false;
     }
 
     if (updatedPassageArray.length) {
@@ -153,9 +168,6 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
             onClick={onClickSortByScore}
             >
                 <h4 className={`mb-3 text-1xl`}>
-                    <span className="inline-block transition-transform group-hover:-translate-x-1 motion-reduce:transform-none">
-                        &lt;
-                    </span>
                     {' '}Sort by sentiment score{' '}
                     <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
                         &gt;
@@ -168,10 +180,19 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
             onClick={onClickSortByPassageLength}
             >
                 <h4 className={`mb-3 text-1xl`}>
-                    <span className="inline-block transition-transform group-hover:-translate-x-1 motion-reduce:transform-none">
-                        &lt;
-                    </span>
                     {' '}Sort by passage length{' '}
+                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                        &gt;
+                    </span>
+                </h4>
+                {/* <p className={`m-0 max-w-[30ch] text-sm opacity-50`}></p> */}
+            </button>
+            <button
+            className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            onClick={onClickSortByIndex}
+            >
+                <h4 className={`mb-3 text-1xl`}>
+                    {' '}Sort by text order{' '}
                     <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
                         &gt;
                     </span>
@@ -183,10 +204,7 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
             onClick={onClickReverseSort}
             >
                 <h4 className={`mb-3 text-1xl`}>
-                    <span className="inline-block transition-transform group-hover:-translate-x-1 motion-reduce:transform-none">
-                        &lt;
-                    </span>
-                    {' '}Reverse the sort{' '}
+                    {' '}Sort {' '} {resultSort.reverse ? 'ascending' : 'descending'} {' '}
                     <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
                         &gt;
                     </span>

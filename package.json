@@ -12,7 +12,8 @@
     "@xenova/transformers": "^2.10.0",
     "next": "14.0.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-natural-typing-effect": "^1.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",

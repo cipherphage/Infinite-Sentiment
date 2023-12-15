@@ -43,10 +43,13 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
             <br/>
             <div>
                 <h4>
-                    `Label: ${updatedPassage.sentiment.label}`
+                    Label: {updatedPassage.sentiment.label}.
                 </h4>
                 <h4>
-                    `Score: ${ (updatedPassage.sentiment.score * 100).toFixed(2) + "%"}`
+                    Score: { (updatedPassage.sentiment.score * 100).toFixed(2) + "%"}.
+                </h4>
+                <h4>
+                    Passage #{updatedPassage.index}.
                 </h4>
             </div>
         </>

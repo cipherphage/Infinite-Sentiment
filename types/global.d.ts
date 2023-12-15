@@ -8,6 +8,7 @@ declare global {
   }
 
   type TextPassage = {
+    index: number
     passage: string
     author: string
     sentiment: Sentiment

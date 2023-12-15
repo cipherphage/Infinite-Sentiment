@@ -29,3 +29,11 @@ body {
     color: black;
     background-color: white;
 }
+
+.HideElement {
+  visibility: hidden;
+}
+
+.ShowElement {
+  visibility: visible;
+}

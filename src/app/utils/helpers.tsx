@@ -16,8 +16,9 @@ export const getRawTextArrayFromString = (s: string): string[] => {
 };
 
 export const getPassagesArrayFromRawTextArray = (sArray: string[], a: string): TextPassage[] => {
-  return sArray.map((el) => {
+  return sArray.map((el, i) => {
     return {
+      index: i,
       passage: el,
       author: a,
       sentiment: defaultSentiment
@@ -48,14 +49,6 @@ export const updateSentimentOfPassage = (textOutput: Sentiment, passage: TextPas
 //     });
 // };
 
-export const typerPauseRandom = async () => {
-  // Use random millisecond and power distribution (thus skewing to smaller pauses)
-  // to simulate actual typing .
-  const randomMS = Math.pow(Math.floor(Math.random() * 20), 2);
-  const timeout = new Promise((resolve) => setTimeout(resolve, randomMS));
-  return timeout;
-};
-
 export const getRandomArrayElement = (a: [] | TextPassage[]) => {
   const randNum = Math.floor(Math.random() * a.length);
   return a[randNum];
@@ -85,6 +78,14 @@ const sortByPassageLength = (r: boolean, a: [] | TextPassage[]): [] | TextPassag
   }
 };
 
+const sortByIndex = (r: boolean, a: [] | TextPassage[]): [] | TextPassage[] => {
+  if (r) {
+    return a.toSorted((i, j) => j.index - i.index);
+  } else {
+    return a.toSorted((i, j) => i.index - j.index);
+  }
+}
+
 export const getSortedArray = (s: string, r: boolean, a: [] | TextPassage[]): [] | TextPassage[] => {
   let sortedA: [] | TextPassage[] = [];
 
@@ -92,6 +93,8 @@ export const getSortedArray = (s: string, r: boolean, a: [] | TextPassage[]): []
     sortedA = sortByScore(r, a);
   } else if (s === 'passageLength') {
     sortedA = sortByPassageLength(r, a);
+  } else if (s === 'index') {
+    sortedA = sortByIndex(r, a);
   }
 
   return sortedA;
