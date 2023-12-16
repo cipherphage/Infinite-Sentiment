@@ -4,11 +4,11 @@
 
 I wanted to try out Hugging Face's Transformers.js ([https://huggingface.co/docs/transformers.js/index](https://huggingface.co/docs/transformers.js/index)) machine learning library on random quotes and I had a text file of Infinite Jest by David Foster Wallace, hence this Infinite Sentiment app which when run will display a random paragraph from Infinite Jest and then run Transformer's `Xenova/distilbert-base-uncased-finetuned-sst-2-english` text-classification model on the paragraph which provides a sentiment label and score for it.
 
-Right now, on load the app parses the entirety of an Infinite Jest text file and then displays one random paragraph which it passes to Transformers.js library to await and then display the sentiment classification. In the future it would behoove me to add a button to pull other paragraphs from the already parsed text (indeed, it wouldn't be too hard to add additional, related functionality like scrolling through adjacent paragraphs, etc). However, as it stands right now, if you want to display a different random paragraph you can just refresh the page. Although it is a lot of text to parse, the time it takes is unnoticeable. It's actually the machine learning that takes some time as you'll see based on the loading text.
+On a branch called `sentiment-viewer` I've started building a more generalized application that creates a heat map based on the sentiment scores of all of the passages from any given text (see pictures below). This remains a work-in-progress, but I have a comparison chart showing how it can be useful to compare different texts by sorting the passages based on sentiment or passage length, not only on the order in which they appear in the works of literature.
 
 ## Play with it:
 
-[https://github.com/unitof](https://github.com/unitof) deployed this app here: [https://infinitesentiment.vercel.app/](https://infinitesentiment.vercel.app/)! Thank you :)
+[https://github.com/unitof](https://github.com/unitof) deployed what's on `main` here: [https://infinitesentiment.vercel.app/](https://infinitesentiment.vercel.app/)! Thank you :)
 
 ## Running this app locally is easy:
 
@@ -33,15 +33,18 @@ That's it!
 
 Note: this app runs entirely client-side and runs machine learning models right in the browser. The local Next.js server is only used to serve the client-side code.
 
-## Sample pictures of the simple UI:
+## Sample pictures of the simple UI (main branch):
 
 ![Infinite Sentiment Example 3](InfiniteSentimentEx3.png)
 
 ![Infinite Sentiment Example 1](InfiniteSentimentEx1.png)
 
-Here is current progress on the Sentiment Viewer branch:
+## Sample pictures/gifs from the sentiment-viewer branch:
 <br/>
-<img alt="Infinite Sentiment Example 4" src="./InfiniteSentimentEx4.png" width="500px" />
+<img alt="Marcel Proust In Search of Lost Time Sorting Passages Example" src="./Proust-Example-I6y6lnq1nQ.gif" width="700px" />
+<br/>
+<img alt="Literature comparison with heat maps" src="./Lit-Comparison-12.16.2023.png" width="1000px" />
+<br/>
 
 ## Bugs
 
