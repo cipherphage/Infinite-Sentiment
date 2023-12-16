@@ -1,8 +1,29 @@
 import { defaultSentiment } from "./defaults";
 import { getPassagesArrayFromRawTextArray, getRawTextArrayFromString } from "./helpers";
 
+export const yourFilePath = "yourgreatliterature.txt";
+export const yourAuthor = "- Your Great Author";
+
+// Fetch a string from a text file.
+const fetchStringFromTextFile = async (file: string) => {
+  const res = await fetch(file);
+  const rest = await res.text();
+  return rest;
+}
+
+// Fetch passages from a string from a text file.
+// Put your text files in the public folder. Specify the path like so:
+// const filePath = "yourgreatliterature.txt";
+export const fetchPassages = async (file: string, author: string) => {
+  const j = await fetchStringFromTextFile(file);
+  const rawTextArray = getRawTextArrayFromString(j);
+  const passagesArray: TextPassage[] = getPassagesArrayFromRawTextArray(
+    rawTextArray, author);
+
+  return {text: rawTextArray, passages: passagesArray};
+}
+
 // export const testUrl = "https://httpbin.org/ip";
-export const ijFilePath = "ij.txt";
 
 // Fetch json from a URL.
 // const fetchJSON = async (url: string) => {
@@ -16,18 +37,3 @@ export const ijFilePath = "ij.txt";
 //   const j = await fetchJSON(url);
 //   return j?.origin;
 // };
-
-const fetchStringFromTextFile = async (file: string) => {
-  const res = await fetch(file);
-  const rest = await res.text();
-  return rest;
-}
-
-export const fetchIJQuote = async (file: string) => {
-  const j = await fetchStringFromTextFile(file);
-  const rawTextArray = getRawTextArrayFromString(j);
-  const passagesArray: TextPassage[] = getPassagesArrayFromRawTextArray(
-    rawTextArray,'- David Foster Wallace, Infinite Jest');
-
-  return {text: rawTextArray, passages: passagesArray};
-};

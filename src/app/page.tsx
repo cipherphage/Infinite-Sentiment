@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Passage from "./components/PassageContainer";
 import Typer from "react-natural-typing-effect";
-import { fetchIJQuote, ijFilePath } from "./utils/api";
+import { fetchPassages, yourAuthor, yourFilePath } from "./utils/api";
 import Sentiment from "./components/SentimentContainer";
 import { getRandomArrayElement } from "./utils/helpers";
 import { defaultTitle } from "./utils/defaults";
@@ -19,7 +19,7 @@ export default function Home() {
     const [author, setAuthor] = useState('');
     const [pIsLoading, setPIsLoading] = useState(true);
     const [pMessage, setPMessage] = useState(
-        `Loading Infinite Jest Quote from ${ijFilePath} ...`);
+        `Loading passages from ${yourAuthor}...`);
 
     // Load text on first mount of component.
     useEffect(() => {
@@ -28,7 +28,7 @@ export default function Home() {
 
     const loadP = async () => {
         // TODO: handle http error and other edge cases.
-        const {text, passages} = await fetchIJQuote(ijFilePath);
+        const {text, passages} = await fetchPassages(yourFilePath, yourAuthor);
         const randP = getRandomArrayElement(passages);
         setPassage(randP.passage);
         setAuthor(randP.author);

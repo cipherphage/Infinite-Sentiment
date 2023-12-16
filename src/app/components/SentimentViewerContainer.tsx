@@ -161,6 +161,11 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
                 <span className="animate-ping">...</span>
             </h4>
         }
+        { (done && ready) && 
+            <h4>
+                Done. Analyzed { passageArray.length } passages.
+            </h4>
+        }
         <br/>
         <div className="flex mb-3 text-center lg:max-w-5xl lg:w-full">
             <button
@@ -221,6 +226,11 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
             <h4>
                 Analyzing passage #{index+1} of { passageArray.length }
                 <span className="animate-ping">...</span>
+            </h4>
+        }
+        { (done && ready) && 
+            <h4>
+                Done. Analyzed { passageArray.length } passages.
             </h4>
         }
         <br/>
