@@ -1,3 +1,56 @@
 This is a text file in the public folder. 
 
-Put your text files in this directory and then specify their paths in src/utils/api.tsx!
+Put your text files in this directory and then specify their paths in src/utils/api.tsx! 
+
+Here's some sample text: 
+
+A barometric low hung over the Atlantic. It moved eastward toward a 
+high-pressure area over Russia without as yet showing any inclina- 
+tion to bypass this high in a northerly direction. The isotherms and 
+isotheres were functioning as they should. The air temperature was 
+appropriate relative to the annual mean temperature and to the ape- 
+riodic monthly fluctuations of the temperature. The rising and set- 
+ting of the sun, the moon, the phases of the moon, of Venus, of the 
+rings of Saturn, and many other significant phenomena were all in 
+accordance with the forecasts in the astronomical yearbooks. The 
+water vapor in the air was at its maximal state of tension, while the 
+humidity was minimal. In a word that characterizes‘the facts fairly 
+accurately, even if it is a bit old-fashioned: It was a fine day in August 
+1913. 
+ 
+I am seated in an office, surrounded by heads and bodies. My posture is consciously 
+congruent to the shape of my hard chair. This is a cold room in University 
+Administration, wood-walled. Remington-hung, double-windowed against the 
+November heat, insulated from Administrative sounds by the reception area outside, at 
+which Uncle Charles, Mr. deLint and I were lately received. 
+ 
+This book is largely concerned with Hobbits, and from its pages a 
+reader may discover much of their character and a little of their 
+history. Further information will also be found in the selection from 
+the Red Book of Westmarch that has already been published, under 
+the title of The Hobbit. That story was derived from the earlier chap- 
+ters of the Red Book, composed by Bilbo himself, the first Hobbit 
+to become famous in the world at large, and called by him There and 
+Back Again, since they told of his journey into the East and his return: 
+an adventure which later involved all the Hobbits in the great events 
+of that Age that are here related. 
+ 
+For a long time I used to go to bed early. Sometimes, when I had put out my 
+candle, my eyes would close so quickly that I had not even time to say “I’m 
+going to sleep.” And half an hour later the thought that it was time to go to sleep 
+would awaken me; I would try to put away the book which, I imagined, was still 
+in my hands, and to blow out the light; I had been thinking all the time, while I 
+was asleep, of what I had just been reading, but my thoughts had run into a 
+channel of their own, until I myself seemed actually to have become the subject 
+of my book: a church, a quartet, the rivalry between Francois I and Charles V. 
+This impression would persist for some moments after I was awake; it did not 
+disturb my mind, but it lay like scales upon my eyes and prevented them from 
+registering the fact that the candle was no longer burning. Then it would begin to 
+seem unintelligible, as the thoughts of a former existence must be to a 
+reincarnate spirit; the subject of my book would separate itself from me, leaving 
+me free to choose whether I would form part of it or no; and at the same time my 
+sight would return and I would be astonished to find myself in a state of 
+darkness, pleasant and restful enough for the eyes, and even more, perhaps, for 
+my mind, to which it appeared incomprehensible, without a cause, a matter dark 
+indeed. 
+ 

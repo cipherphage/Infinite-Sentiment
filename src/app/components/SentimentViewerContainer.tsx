@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Squares from "./Squares/Squares";
-import { getSortedArray, updateSentimentOfPassage } from "../utils/helpers";
+import { getIntlSegmentIterator, getSortedArray, updateSentimentOfPassage } from "../utils/helpers";
 import "./Squares/squareStyles.css";
-import { defaultPassage } from "../utils/defaults";
+import { defaultPassage, defaultSentiment } from "../utils/defaults";
 
 interface SentimentViewerProps {
     textArray: string[];
@@ -16,7 +16,7 @@ type ResultSort = {
 }
 
 export default function SentimentViewer({ textArray, passageArray, isLoading }: SentimentViewerProps) {
-  const [index, setIndex] = useState(0);
+  const [passageIndex, setPassageIndex] = useState(0);
   const [updatedPassage, setUpdatedPassage] = useState<TextPassage>(defaultPassage);
   const [updatedPassageArray, setUpdatedPassageArray] = useState<TextPassage[]>([]);
   const [resultSort, setResultSort] = useState<ResultSort>({ sort: 'index', reverse: false });
@@ -26,6 +26,7 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
   const [progress, setProgress] = useState(0);
   const [file, setFile] = useState('');
   const [modelName, setModelName] = useState('');
+  const [granularity, setGranularity] = useState<Intl.SegmenterOptions["granularity"]>('sentence');
 
   const worker = useRef<Worker | null>(null);
 
@@ -51,14 +52,26 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
           setReady(true);
           break;
         case 'complete':
-          const newP = updateSentimentOfPassage(e.data.output[0], passageArray[e.data.index]);
-          setUpdatedPassage(newP);
-          const index = (passageArray.length !== e.data.index+1) ? e.data.index+1 : -1;
-          if (index >= 0) {
-            setIndex(index);
-            classify(textArray[index],index);
+          if (e.data.output.length > 0) {
+            const currentP = {index: e.data.pIndex, passage: e.data.t[e.data.cIndex].segment, author: passageArray[0].author, sentiment: defaultSentiment};
+            const newP = updateSentimentOfPassage(e.data.output[0], currentP);
+            setUpdatedPassage(newP);
+          }
+
+          if (e.data.cIndex < e.data.t.length-1){
+            classify(e.data.t, e.data.pIndex, e.data.cIndex+1);
           } else {
-            setDone(true);
+            const pIndex = (textArray.length !== e.data.pIndex+1) ? e.data.pIndex+1 : -1;
+
+            if (pIndex >= 0) {
+              const newIter = getIntlSegmentIterator(textArray[pIndex], granularity);
+              const newSegments = [...newIter];
+
+              setPassageIndex(pIndex);
+              classify(newSegments, pIndex, 0);
+            } else {
+              setDone(true);
+            }
           }
           break;
       }
@@ -68,7 +81,10 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
     worker.current.addEventListener('message', onMessageReceived);
 
     if (!isLoading) {
-      classify(textArray[0], 0);
+      const newIter = getIntlSegmentIterator(textArray[0], granularity);
+      const newSegments = [...newIter];
+
+      classify(newSegments, 0, 0);
     }
 
     // Define a cleanup function for when the component is unmounted.
@@ -83,11 +99,16 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
     }
   }, [updatedPassage]);
 
-  const classify = useCallback((t: string, i: number) => {
+  const classify = useCallback((t: Intl.SegmentData[], pIndex: number, cIndex: number) => {
     if (worker.current) {
-      worker.current.postMessage({ t, i });
+      worker.current.postMessage({ t, pIndex, cIndex});
     }
   }, []);
+
+  const onClickChangeGranularity = () => {
+    const g = granularity === 'word' ? 'sentence' : 'word';
+    setGranularity(g);
+  }
 
   const onClickSortByScore = () => {
     let s = resultSort.sort;
@@ -157,17 +178,29 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
         <br/>
         { (!done && ready) && 
             <h4>
-                Analyzing passage #{index+1} of { passageArray.length }
+                Analyzing passage #{passageIndex+1} of { textArray.length }
                 <span className="animate-ping">...</span>
             </h4>
         }
         { (done && ready) && 
             <h4>
-                Done. Analyzed { passageArray.length } passages.
+                Done. Analyzed { updatedPassageArray.length } passages.
             </h4>
         }
         <br/>
         <div className="flex mb-3 text-center lg:max-w-5xl lg:w-full">
+            <button
+            className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            onClick={onClickChangeGranularity}
+            >
+                <h4 className={`mb-3 text-1xl`}>
+                    {' '}Analyze by {granularity === 'word' ? 'sentence' : 'word'}{' '}
+                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                        &gt;
+                    </span>
+                </h4>
+                {/* <p className={`m-0 max-w-[30ch] text-sm opacity-50`}></p> */}
+            </button>
             <button
             className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
             onClick={onClickSortByScore}
@@ -224,13 +257,13 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
         <br/>
         { (!done && ready) && 
             <h4>
-                Analyzing passage #{index+1} of { passageArray.length }
+                Analyzing passage #{passageIndex+1} of { textArray.length }
                 <span className="animate-ping">...</span>
             </h4>
         }
         { (done && ready) && 
             <h4>
-                Done. Analyzed { passageArray.length } passages.
+                Done. Analyzed { updatedPassageArray.length } passages.
             </h4>
         }
         <br/>

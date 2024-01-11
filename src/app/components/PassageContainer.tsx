@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 interface PassageProps {
   word: string;
   subtitle: string;
@@ -15,7 +13,7 @@ export default function Passage({ word, subtitle, isLoading, message, classes }:
       {isLoading && <h2 className="PassageLoadingTitle">{ message }</h2>}
 
       {!isLoading && <h3 className={`TyperMainLetterSpanner ${classes}`} style={{maxHeight:"250px",overflowY:"scroll"}}>
-        {word}
+        {'"' + word + '"'}
       </h3>}
       <br/>
 

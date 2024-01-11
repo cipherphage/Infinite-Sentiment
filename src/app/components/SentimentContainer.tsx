@@ -39,8 +39,10 @@ export default function Sentiment({ text, isLoading }: SentimentContProps) {
           break;
         case 'complete':
           setReady(true);
-          setLabel(e.data.output[0].label);
-          setScore(e.data.output[0].score);
+          if (e.data.output.length > 0) {
+            setLabel(e.data.output[0].label);
+            setScore(e.data.output[0].score);
+          }
           break;
       }
     };

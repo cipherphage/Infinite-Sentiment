@@ -1,19 +1,23 @@
-import { text } from "stream/consumers";
 import { defaultSentiment } from "./defaults";
 
 export const getRawTextArrayFromString = (s: string): string[] => {
   const rawArray = s.split(
-    /[.!'"?](?=[\s]+[\n]+[\s]+)/g
+    /(?=[。]+[.]+[!][']["][?][؟][\t\r\n]+|[\s]+[\t\r\n]+[\s]+)/g
   );
   return rawArray.filter((el) => {
     if (el) {
       const e = el.trim();
       if (e) {
-        return '"' + e + '"';
+        return e;
       }
     }
   });
 };
+
+export const getIntlSegmentIterator = (s: string, g: Intl.SegmenterOptions["granularity"], l: string = 'en'): IterableIterator<Intl.SegmentData> => {
+  const segmenter = new Intl.Segmenter(l, { granularity: g });
+  return segmenter.segment(s)[Symbol.iterator]();
+}
 
 export const getPassagesArrayFromRawTextArray = (sArray: string[], a: string): TextPassage[] => {
   return sArray.map((el, i) => {

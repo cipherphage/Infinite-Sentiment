@@ -1,4 +1,3 @@
-import { defaultSentiment } from "./defaults";
 import { getPassagesArrayFromRawTextArray, getRawTextArrayFromString } from "./helpers";
 
 export const yourFilePath = "yourgreatliterature.txt";
