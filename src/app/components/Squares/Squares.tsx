@@ -12,14 +12,14 @@ interface SquareProps {
 export default function Squares({ updatedPassage, updatedPassageArray }: SquareProps) {
   const [selectedNode, setSelectedNode] = useState<Element | null>(null);
   const [selectedPassage, setSelectedPassage] = useState<TextPassage | null>(null);
+  const [isUserSelected, setIsUserSelected] = useState(false);
 
   useEffect(() => {
-    if ((!selectedPassage || !selectedNode) && (updatedPassageArray.length)) {
-      const up = updatedPassageArray[updatedPassageArray.length-1];
-      setSelectedNode(getSquareByIndex(up.segmentIndex));
-      setSelectedPassage(up);
+    if (!isUserSelected) {
+      setSelectedNode(getSquareByIndex(updatedPassage.segmentIndex));
+      setSelectedPassage(updatedPassage);
     }
-  }, [updatedPassageArray]);
+  }, [updatedPassage]);
 
   useEffect(() => {
     if (selectedNode) {
@@ -36,9 +36,11 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
       (selectedPassage?.segmentIndex === passage.segmentIndex)) {
       setSelectedNode(null);
       setSelectedPassage(null);
+      setIsUserSelected(false);
     } else {
       setSelectedNode(e.currentTarget);
       setSelectedPassage(passage);
+      setIsUserSelected(true);
     }
   };
 
@@ -58,6 +60,7 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
     }
     setSelectedNode(getSquareByIndex(nextIndex));
     setSelectedPassage(updatedPassageArray[nextIndex]);
+    setIsUserSelected(true);
   };
 
   const getSquareByIndex = (index: number): Element | null => {
@@ -99,7 +102,12 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
             buttonText={null}
             buttonSymbol="lessthan" />
 
-          <Passage word={selectedPassage.passage} isLoading={false} message="" subtitle={selectedPassage.author} classes="flex-grow group" />
+          <Passage
+            word={selectedPassage.passage}
+            isLoading={false}
+            message=""
+            subtitle={selectedPassage.author}
+            classes="flex-grow group" />
           <br/>
 
           <div className="flex-grow group">
