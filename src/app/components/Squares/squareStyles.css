@@ -9,3 +9,11 @@
     padding: 1%;
     margin: 0.5%;
 }
+
+.square-tooltip-overflow {
+    overflow-y: scroll;
+}
+
+.square-selected-border {
+    border: 0.1rem solid black;
+}

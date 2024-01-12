@@ -1,8 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+
 import Squares from "./Squares/Squares";
 import { getIntlSegmentIterator, getSortedArray, updateSentimentOfPassage } from "../utils/helpers";
 import "./Squares/squareStyles.css";
 import { defaultPassage, defaultSentiment } from "../utils/defaults";
+
+import Info from "./Info/Info";
 
 interface SentimentViewerProps {
     textArray: string[];
@@ -53,7 +56,12 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
           break;
         case 'complete':
           if (e.data.output.length > 0) {
-            const currentP = {index: e.data.pIndex, passage: e.data.t[e.data.cIndex].segment, author: passageArray[0].author, sentiment: defaultSentiment};
+            const currentP = {
+              index: e.data.pIndex,
+              passage: e.data.t[e.data.cIndex].segment,
+              author: passageArray[0].author,
+              sentiment: defaultSentiment
+            };
             const newP = updateSentimentOfPassage(e.data.output[0], currentP);
             setUpdatedPassage(newP);
           }
@@ -163,7 +171,7 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
     }
   };
 
-  return <>
+  return <React.Fragment>
     <div>
         <h4>
             { (!ready) && 
@@ -176,17 +184,13 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
             </h4>
         }
         <br/>
-        { (!done && ready) && 
-            <h4>
-                Analyzing passage #{passageIndex+1} of { textArray.length }
-                <span className="animate-ping">...</span>
-            </h4>
-        }
-        { (done && ready) && 
-            <h4>
-                Done. Analyzed { updatedPassageArray.length } passages.
-            </h4>
-        }
+        <Info
+          passageIndexPlusOne={passageIndex+1}
+          textArrayLength={textArray.length}
+          updatedPassageArrayLength={updatedPassageArray.length}
+          granularity={granularity}
+          done={done}
+          ready={ready} />
         <br/>
         <div className="flex mb-3 text-center lg:max-w-5xl lg:w-full">
             <button
@@ -253,20 +257,12 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
         <br/>
     </div>
     <Squares updatedPassage={updatedPassage} updatedPassageArray={updatedPassageArray} />
-    <div>
-        <br/>
-        { (!done && ready) && 
-            <h4>
-                Analyzing passage #{passageIndex+1} of { textArray.length }
-                <span className="animate-ping">...</span>
-            </h4>
-        }
-        { (done && ready) && 
-            <h4>
-                Done. Analyzed { updatedPassageArray.length } passages.
-            </h4>
-        }
-        <br/>
-    </div>
-  </>;
+    <Info
+      passageIndexPlusOne={passageIndex+1}
+      textArrayLength={textArray.length}
+      updatedPassageArrayLength={updatedPassageArray.length}
+      granularity={granularity}
+      done={done}
+      ready={ready} />
+  </React.Fragment>;
 };

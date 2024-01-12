@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import React, { useState } from "react";
+
 import Passage from "../PassageContainer";
 
 interface SquareProps {
@@ -7,17 +8,23 @@ interface SquareProps {
 }
 
 export default function Squares({ updatedPassage, updatedPassageArray }: SquareProps) {
-  useEffect(()=>{
-    //console.log(updatedPassageArray.length);
-  }, [updatedPassageArray]);
+  const [selectedNode, setSelectedNode] = useState<Element | null>(null);
+  const [selectedPassage, setSelectedPassage] = useState<TextPassage | null>();
 
   const onClickSquare = (e: React.MouseEvent, passage: TextPassage) => {
-    console.log(e.currentTarget);
-    console.log(passage);
+    if (selectedNode) {
+      selectedNode.classList.remove('square-selected-border');
+    }
+    
+    e.currentTarget.classList.add('square-selected-border');
+    setSelectedNode(e.currentTarget);
+    setSelectedPassage(passage);
   };
 
+  let passage = selectedPassage ? selectedPassage : updatedPassage;
+
   return (
-    <>
+    <React.Fragment>
       <div className="square-grid">
       {updatedPassageArray.map((el, i) => {
         const bc = el.sentiment.label === "POSITIVE" ?
@@ -35,26 +42,26 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
               onClick={(e) => onClickSquare(e, el)}
           >
               <span
-      className="absolute hidden group-hover:flex -top-2 -right-3 translate-x-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2  before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-gray-700">
-      "{el.passage}" has label {el.sentiment.label}, score {el.sentiment.score}, and is index {el.index} out of {updatedPassageArray.length-1}.</span>
+      className="absolute hidden group-hover:flex -top-2 -right-3 translate-x-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2 before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-gray-700 square-tooltip-overflow">
+      "{el.passage}" has label {el.sentiment.label}, score {el.sentiment.score}, and is in passage #{el.index+1} of {updatedPassageArray.length}.</span>
           </div>
         );
       })}
       </div>
       <br/>
-      <Passage word={updatedPassage.passage} isLoading={false} message="" subtitle={updatedPassage.author} classes="" />
+      <Passage word={passage.passage} isLoading={false} message="" subtitle={passage.author} classes="" />
       <br/>
       <div>
         <h4>
-          Label: {updatedPassage.sentiment.label}.
+          Label: {passage.sentiment.label}.
         </h4>
         <h4>
-          Score: { (updatedPassage.sentiment.score * 100).toFixed(2) + "%"}.
+          Score: { (passage.sentiment.score * 100).toFixed(2) + "%"}.
         </h4>
         <h4>
-          Passage #{updatedPassage.index}.
+          From passage #{passage.index}.
         </h4>
       </div>
-    </>
+    </React.Fragment>
   );
 };

@@ -6,7 +6,8 @@ export const getRawTextArrayFromString = (s: string): string[] => {
   );
   return rawArray.filter((el) => {
     if (el) {
-      const e = el.trim();
+      let e = el.trim();
+      e = e.replace(/[\r\n]+|[\t]+/g, '');
       if (e) {
         return e;
       }

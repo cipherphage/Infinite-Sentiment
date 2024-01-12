@@ -6,8 +6,10 @@ import { pipeline, env } from "@xenova/transformers";
 // Specify a custom location for models (defaults to '/models/').
 // env.localModelPath = process.env.PUBLIC_URL + '/models/';
 
-// Skip local model check and cache
+// Skip local model check
 env.allowLocalModels = false;
+
+// Set this flag to false to stop transformers from using browser cache:
 // env.useBrowserCache = false;
 
 
