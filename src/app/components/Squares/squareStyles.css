@@ -1,7 +1,7 @@
 .square-grid {
     display: grid;
     gap: 0.2rem;
-    grid-template-columns: repeat(auto-fit, minmax(0.5%, 1%));
+    /* grid-template-columns: repeat(auto-fit, minmax(0.5%, 1%)); */
 }
 
 .square {

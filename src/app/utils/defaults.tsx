@@ -18,3 +18,11 @@ export const defaultPassage: TextPassage = {
   segmentIndex: -1,
   sentiment: defaultSentiment
 };
+
+export const defaultGridSize = {
+  min: 0.5,
+  max: 100,
+  styleString1: 'repeat(auto-fit, minmax(',
+  styleString2: '%,',
+  styleString3: '%))'
+}

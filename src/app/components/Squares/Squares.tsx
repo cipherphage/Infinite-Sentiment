@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Passage from "../PassageContainer";
 import Button from "../Button/Button";
 import Tooltip from "../Info/Tooltip";
+import { defaultGridSize } from "@/app/utils/defaults";
 
 interface SquareProps {
   updatedPassage: TextPassage;
@@ -13,6 +14,44 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
   const [selectedNode, setSelectedNode] = useState<Element | null>(null);
   const [selectedPassage, setSelectedPassage] = useState<TextPassage | null>(null);
   const [isUserSelected, setIsUserSelected] = useState(false);
+  const [maxGridSize, setMaxGridSize] = useState(40);
+  const [lastUpaLen, setLastUpaLen] = useState(0);
+  const [gridSizeStyle, setGridSizeStyle] = useState(
+    defaultGridSize.styleString1 +
+    defaultGridSize.min +
+    defaultGridSize.styleString2 +
+    defaultGridSize.max +
+    defaultGridSize.styleString3
+  );
+
+  useEffect(() => {
+    const newStyleString = defaultGridSize.styleString1 +
+      defaultGridSize.min +
+      defaultGridSize.styleString2 +
+      maxGridSize +
+      defaultGridSize.styleString3;
+    setGridSizeStyle(newStyleString);
+  }, [maxGridSize]);
+
+  useEffect(() => {
+    const currentUpaLen = updatedPassageArray.length;
+
+    if (currentUpaLen > 0) {
+      if (currentUpaLen < lastUpaLen) {
+        if (maxGridSize < 40.5) {
+          setMaxGridSize(maxGridSize+0.5);
+        }
+      } else if (currentUpaLen > lastUpaLen) {
+        if (maxGridSize > 0.5) {
+          setMaxGridSize(maxGridSize-0.5);
+        }
+      } else {
+        return;
+      }
+
+      setLastUpaLen(currentUpaLen);
+    } 
+  }, [updatedPassageArray]);
 
   useEffect(() => {
     if (!isUserSelected) {
@@ -74,7 +113,7 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
 
   return (
     <React.Fragment>
-      <div className="square-grid">
+      <div className="square-grid" style={{gridTemplateColumns: gridSizeStyle}} >
         {updatedPassageArray.map((el, i) => {
           const bc = el.sentiment.label === "POSITIVE" ?
             `rgba(0,0,${el.sentiment.color},1)` :
