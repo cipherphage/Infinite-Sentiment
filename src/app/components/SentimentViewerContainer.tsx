@@ -55,19 +55,23 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
           setReady(true);
           break;
         case 'complete':
+          let totalSegments = e.data.totalSegments;
+          
           if (e.data.output.length > 0) {
             const currentP = {
               index: e.data.pIndex,
+              segmentIndex: e.data.totalSegments,
               passage: e.data.t[e.data.cIndex].segment,
               author: passageArray[0].author,
               sentiment: defaultSentiment
             };
             const newP = updateSentimentOfPassage(e.data.output[0], currentP);
             setUpdatedPassage(newP);
+            totalSegments++;
           }
 
           if (e.data.cIndex < e.data.t.length-1){
-            classify(e.data.t, e.data.pIndex, e.data.cIndex+1);
+            classify(e.data.t, e.data.pIndex, e.data.cIndex+1, totalSegments);
           } else {
             const pIndex = (textArray.length !== e.data.pIndex+1) ? e.data.pIndex+1 : -1;
 
@@ -76,7 +80,7 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
               const newSegments = [...newIter];
 
               setPassageIndex(pIndex);
-              classify(newSegments, pIndex, 0);
+              classify(newSegments, pIndex, 0, totalSegments);
             } else {
               setDone(true);
             }
@@ -92,7 +96,7 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
       const newIter = getIntlSegmentIterator(textArray[0], granularity);
       const newSegments = [...newIter];
 
-      classify(newSegments, 0, 0);
+      classify(newSegments, 0, 0, 0);
     }
 
     // Define a cleanup function for when the component is unmounted.
@@ -107,9 +111,9 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
     }
   }, [updatedPassage]);
 
-  const classify = useCallback((t: Intl.SegmentData[], pIndex: number, cIndex: number) => {
+  const classify = useCallback((t: Intl.SegmentData[], pIndex: number, cIndex: number, totalSegments: number) => {
     if (worker.current) {
-      worker.current.postMessage({ t, pIndex, cIndex});
+      worker.current.postMessage({ t, pIndex, cIndex, totalSegments});
     }
   }, []);
 

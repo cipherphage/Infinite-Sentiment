@@ -9,15 +9,15 @@ interface PassageProps {
 export default function Passage({ word, subtitle, isLoading, message, classes }: PassageProps) {
 
   return (
-    <div className="PassageContainer">
-      {isLoading && <h2 className="PassageLoadingTitle">{ message }</h2>}
+    <div className={`PassageContainer ${classes}`}>
+      {isLoading && <h2 >{ message }</h2>}
 
-      {!isLoading && <h3 className={`TyperMainLetterSpanner ${classes}`} style={{maxHeight:"250px",overflowY:"scroll"}}>
+      {!isLoading && <h3 style={{maxHeight:"250px",overflowY:"scroll"}}>
         {'"' + word + '"'}
       </h3>}
       <br/>
 
-      {subtitle && <h4 className="TyperSubtitleLetterSpanner">
+      {subtitle && <h4>
         {subtitle}
       </h4>}
     </div>

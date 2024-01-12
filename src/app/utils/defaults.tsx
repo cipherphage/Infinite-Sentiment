@@ -15,5 +15,6 @@ export const defaultPassage: TextPassage = {
   passage: '',
   author: '',
   index: -1,
+  segmentIndex: -1,
   sentiment: defaultSentiment
 };

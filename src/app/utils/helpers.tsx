@@ -24,6 +24,7 @@ export const getPassagesArrayFromRawTextArray = (sArray: string[], a: string): T
   return sArray.map((el, i) => {
     return {
       index: i,
+      segmentIndex: -1,
       passage: el,
       author: a,
       sentiment: defaultSentiment
@@ -35,7 +36,7 @@ export const updateSentimentOfPassage = (textOutput: Sentiment, passage: TextPas
   const s = passage.sentiment;
   const c = Math.floor(textOutput.score * 100 * 2.54999);
   return {
-    ...passage, 
+    ...passage,
     sentiment: {
       label: textOutput.label,
       score: textOutput.score,

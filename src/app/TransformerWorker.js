@@ -12,39 +12,60 @@ env.allowLocalModels = false;
 // Set this flag to false to stop transformers from using browser cache:
 // env.useBrowserCache = false;
 
-
+// Array holding model-specific pipeline singletons.
+const existingPipelines = [];
 
 // Use the Singleton pattern to enable lazy construction of the pipeline.
-class PipelineSingleton {
-  static task = 'text-classification';
-  static model = 'Xenova/distilbert-base-uncased-finetuned-sst-2-english';
-  static instance = null;
-
-  static async getInstance(progress_callback = null) {
-    if (this.instance === null) {
-      this.instance = pipeline(this.task, this.model, { progress_callback });
+const pipelineFactory = (modelName) => {
+  class PipelineSingleton {
+    static task = 'text-classification';
+    static model = modelName;
+    static instance = null;
+  
+    static async getInstance(progress_callback = null) {
+      if (this.instance === null) {
+        this.instance = pipeline(this.task, this.model, { progress_callback });
+      }
+      return this.instance;
     }
-    return this.instance;
   }
-}
+  return PipelineSingleton;
+};
 
 // Listen for messages from the main thread
 self.addEventListener('message', async (event) => {
-  const pI = event.data.pIndex;
-  const cI = event.data.cIndex;
+  const pIndex = event.data.pIndex;
+  const cIndex = event.data.cIndex;
+  const modelName = event.data?.modelName ||
+    'Xenova/distilbert-base-uncased-finetuned-sst-2-english';
+  let totalSegments = event.data.totalSegments;
   let output = [];
+  let pipelineSingleton;
 
+  if (existingPipelines.length > 0) {
+    for (let pipeline of existingPipelines) {
+      if (pipeline.model === modelName) {
+        pipelineSingleton = pipeline;
+      }
+    }
+  }
+
+  if (!pipelineSingleton) {
+    console.log('making new pipeline instance');
+    pipelineSingleton = pipelineFactory(modelName);
+    existingPipelines.push(pipelineSingleton);
+  }
   // Retrieve the classification pipeline. When called for the first time,
   // this will load the pipeline and save it for future use.
-  let classifier = await PipelineSingleton.getInstance(x => {
+  let classifier = await pipelineSingleton.getInstance(x => {
     // We also add a progress callback to the pipeline so that we can
     // track model loading.
     self.postMessage(x);
   });
   
   // Actually perform the classification
-  if (event.data.t[cI]?.segment && /\S/.test(event.data.t[cI]?.segment)) {
-    output = await classifier(event.data.t[cI].segment);
+  if (event.data.t[cIndex]?.segment && /\S/.test(event.data.t[cIndex]?.segment)) {
+    output = await classifier(event.data.t[cIndex].segment);
   }
 
   // Send the output back to the main thread
@@ -52,7 +73,9 @@ self.addEventListener('message', async (event) => {
     status: 'complete',
     output: output,
     t: event.data.t,
-    pIndex: pI,
-    cIndex: cI
+    pIndex: pIndex,
+    cIndex: cIndex,
+    modelName: modelName,
+    totalSegments: totalSegments
   });
 });
