@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import Passage from "../PassageContainer";
+import Button from "../Button/Button";
+import Tooltip from "../Info/Tooltip";
 
 interface SquareProps {
   updatedPassage: TextPassage;
@@ -80,14 +82,11 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
 
           return (
             <div 
-                key={'sq' + i} 
-                className="square group hover:translate-x-1 hover:translate-y-1 transition-transform" 
-                style={style}
-                onClick={(e) => onClickSquare(e, el)}
-            >
-                <span
-        className="absolute hidden group-hover:flex -top-2 -right-3 translate-x-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2 before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-gray-700 square-tooltip-overflow">
-        "{el.passage}" has label {el.sentiment.label}, score {el.sentiment.score}, and is segment #{el.segmentIndex+1} in passage #{el.index+1}.</span>
+              key={'sq' + i} 
+              className="square group hover:translate-x-1 hover:translate-y-1 transition-transform" 
+              style={style}
+              onClick={(e) => onClickSquare(e, el)} >
+                <Tooltip textPassage={el} />
             </div>
           );
         })}
@@ -95,20 +94,14 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
       <br/>
       { selectedPassage &&
         <div className="flex mb-3 text-center lg:max-w-5xl lg:w-full">
-          <button
-          className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          onClick={(e) => onNextClick(e, false)}
-          >
-              <h4 className={`mb-3 text-1xl`}>
-                  {' '}
-                  <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                      &lt;
-                  </span>
-              </h4>
-              {/* <p className={`m-0 max-w-[30ch] text-sm opacity-50`}></p> */}
-          </button>
+          <Button
+            onClickCallback={(e) => onNextClick(e, false)}
+            buttonText={null}
+            buttonSymbol="lessthan" />
+
           <Passage word={selectedPassage.passage} isLoading={false} message="" subtitle={selectedPassage.author} classes="flex-grow group" />
           <br/>
+
           <div className="flex-grow group">
             <h4>
               Label: {selectedPassage.sentiment.label}.
@@ -120,18 +113,11 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
               From passage #{selectedPassage.index}.
             </h4>
           </div>
-          <button
-          className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          onClick={(e) => onNextClick(e, true)}
-          >
-              <h4 className={`mb-3 text-1xl`}>
-                  {' '}
-                  <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                      &gt;
-                  </span>
-              </h4>
-              {/* <p className={`m-0 max-w-[30ch] text-sm opacity-50`}></p> */}
-          </button>
+          
+          <Button
+            onClickCallback={(e) => onNextClick(e, false)}
+            buttonText={null}
+            buttonSymbol="greaterthan" />
         </div>
       }
     </React.Fragment>

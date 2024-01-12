@@ -6,6 +6,7 @@ import "./Squares/squareStyles.css";
 import { defaultPassage, defaultSentiment } from "../utils/defaults";
 
 import Info from "./Info/Info";
+import Button from "./Button/Button";
 
 interface SentimentViewerProps {
     textArray: string[];
@@ -56,7 +57,7 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
           break;
         case 'complete':
           let totalSegments = e.data.totalSegments;
-          
+
           if (e.data.output.length > 0) {
             const currentP = {
               index: e.data.pIndex,
@@ -197,66 +198,26 @@ export default function SentimentViewer({ textArray, passageArray, isLoading }: 
           ready={ready} />
         <br/>
         <div className="flex mb-3 text-center lg:max-w-5xl lg:w-full">
-            <button
-            className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            onClick={onClickChangeGranularity}
-            >
-                <h4 className={`mb-3 text-1xl`}>
-                    {' '}Analyze by {granularity === 'word' ? 'sentence' : 'word'}{' '}
-                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                        &gt;
-                    </span>
-                </h4>
-                {/* <p className={`m-0 max-w-[30ch] text-sm opacity-50`}></p> */}
-            </button>
-            <button
-            className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            onClick={onClickSortByScore}
-            >
-                <h4 className={`mb-3 text-1xl`}>
-                    {' '}Sort by sentiment score{' '}
-                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                        &gt;
-                    </span>
-                </h4>
-                {/* <p className={`m-0 max-w-[30ch] text-sm opacity-50`}></p> */}
-            </button>
-            <button
-            className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            onClick={onClickSortByPassageLength}
-            >
-                <h4 className={`mb-3 text-1xl`}>
-                    {' '}Sort by passage length{' '}
-                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                        &gt;
-                    </span>
-                </h4>
-                {/* <p className={`m-0 max-w-[30ch] text-sm opacity-50`}></p> */}
-            </button>
-            <button
-            className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            onClick={onClickSortByIndex}
-            >
-                <h4 className={`mb-3 text-1xl`}>
-                    {' '}Sort by text order{' '}
-                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                        &gt;
-                    </span>
-                </h4>
-                {/* <p className={`m-0 max-w-[30ch] text-sm opacity-50`}></p> */}
-            </button>
-            <button
-            className="flex-grow group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            onClick={onClickReverseSort}
-            >
-                <h4 className={`mb-3 text-1xl`}>
-                    {' '}Sort {' '} {resultSort.reverse ? 'ascending' : 'descending'} {' '}
-                    <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                        &gt;
-                    </span>
-                </h4>
-                {/* <p className={`m-0 max-w-[30ch] text-sm opacity-50`}></p> */}
-            </button>
+            <Button
+              onClickCallback={onClickChangeGranularity}
+              buttonText={`Analyze by ${granularity === 'word' ? 'sentence' : 'word'}`}
+              buttonSymbol="greaterthan" />
+            <Button
+              onClickCallback={onClickSortByScore}
+              buttonText="Sort by sentiment score"
+              buttonSymbol="greaterthan" />
+            <Button
+              onClickCallback={onClickSortByPassageLength}
+              buttonText="Sort by passage length"
+              buttonSymbol="greaterthan" />
+            <Button
+              onClickCallback={onClickSortByIndex}
+              buttonText="Sort by text order"
+              buttonSymbol="greaterthan" />
+            <Button
+              onClickCallback={onClickReverseSort}
+              buttonText={`Sort ${' '} ${resultSort.reverse ? 'ascending' : 'descending'}`}
+              buttonSymbol="greaterthan" />
         </div>
         <br/>
     </div>
