@@ -36,21 +36,19 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
   useEffect(() => {
     const currentUpaLen = updatedPassageArray.length;
 
-    if (currentUpaLen > 0) {
-      if (currentUpaLen < lastUpaLen) {
-        if (maxGridSize < 40.5) {
-          setMaxGridSize(maxGridSize+0.5);
-        }
-      } else if (currentUpaLen > lastUpaLen) {
-        if (maxGridSize > 0.5) {
-          setMaxGridSize(maxGridSize-0.5);
-        }
-      } else {
-        return;
+    if (currentUpaLen < lastUpaLen) {
+      if (maxGridSize < 60.5) {
+        setMaxGridSize(maxGridSize+0.5);
       }
+    } else if (currentUpaLen > lastUpaLen) {
+      if (maxGridSize > 0.5) {
+        setMaxGridSize(maxGridSize-0.5);
+      }
+    } else {
+      return;
+    }
 
-      setLastUpaLen(currentUpaLen);
-    } 
+    setLastUpaLen(currentUpaLen);
   }, [updatedPassageArray]);
 
   useEffect(() => {

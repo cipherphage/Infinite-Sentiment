@@ -63,7 +63,7 @@ export default function Home() {
         <br/>
         <Sentiment text={passage} isLoading={pIsLoading} />
         <br/>
-        <SentimentViewer textArray={textArray} passageArray={passageArray} isLoading={pIsLoading} />
+        <SentimentViewer passageArray={passageArray} isLoading={pIsLoading} />
 
       </div>
     </main>

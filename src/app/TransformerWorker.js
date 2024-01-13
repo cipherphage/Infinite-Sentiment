@@ -64,15 +64,22 @@ self.addEventListener('message', async (event) => {
   });
   
   // Actually perform the classification
-  if (event.data.t[cIndex]?.segment && /\S/.test(event.data.t[cIndex]?.segment)) {
-    output = await classifier(event.data.t[cIndex].segment);
+  if (event.data.isSegmented && event.data.segments) {
+    if (event.data.segments[cIndex]?.segment && /\S/.test(event.data.segments[cIndex]?.segment)) {
+      output = await classifier(event.data.segments[cIndex].segment);
+    }
+  } else if (!event.data.isSegmented && event.data.textPassage) {
+    output = await classifier(event.data.textPassage.passage);
+  } else {
   }
-
+  
   // Send the output back to the main thread
   self.postMessage({
     status: 'complete',
     output: output,
-    t: event.data.t,
+    isSegmented: event.data.isSegmented,
+    segments: event.data.segments,
+    textPassage: event.data.textPassage,
     pIndex: pIndex,
     cIndex: cIndex,
     modelName: modelName,

@@ -15,10 +15,10 @@ export const getRawTextArrayFromString = (s: string): string[] => {
   });
 };
 
-export const getIntlSegmentIterator = (s: string, g: Intl.SegmenterOptions["granularity"], l: string = 'en'): IterableIterator<Intl.SegmentData> => {
+export const getIntlSegmentArray = (s: string, g: Intl.SegmenterOptions["granularity"], l: string = 'en'): Intl.SegmentData[] => {
   const segmenter = new Intl.Segmenter(l, { granularity: g });
-  return segmenter.segment(s)[Symbol.iterator]();
-}
+  return [...segmenter.segment(s)[Symbol.iterator]()];
+};
 
 export const getPassagesArrayFromRawTextArray = (sArray: string[], a: string): TextPassage[] => {
   return sArray.map((el, i) => {
@@ -27,6 +27,7 @@ export const getPassagesArrayFromRawTextArray = (sArray: string[], a: string): T
       segmentIndex: -1,
       passage: el,
       author: a,
+      transformersOutput: [],
       sentiment: defaultSentiment
     };
   });

@@ -16,6 +16,7 @@ export const defaultPassage: TextPassage = {
   author: '',
   index: -1,
   segmentIndex: -1,
+  transformersOutput: [],
   sentiment: defaultSentiment
 };
 
