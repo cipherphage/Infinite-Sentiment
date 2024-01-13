@@ -88,6 +88,7 @@ export default function SentimentViewer({ passageArray, isLoading }: SentimentVi
 
   useEffect(() => {
     if (!isPaused && lastCompleteMessage) {
+      // TODO put some of this logic into helper functions for unit testing.
       let totalSegments = lastCompleteMessage.data.totalSegments;
 
       if (lastCompleteMessage.data.output.length > 0) {
@@ -155,25 +156,6 @@ export default function SentimentViewer({ passageArray, isLoading }: SentimentVi
       worker.current.postMessage({ isSegmented, segments, textPassage, pIndex, cIndex, totalSegments });
     }
   }, []);
-
-  // // Create a callback function for messages from the worker thread.
-  // const onMessageReceived = (e: TransformersMessage) => {
-  //   switch (e.data.status) {
-  //     case 'initiate':
-  //       setReady(false);
-  //       setModelName(e.data?.name);
-  //       break;
-  //     case 'progress':
-  //       setProgress(e.data?.progress);
-  //       setFile(e.data?.file);
-  //     case 'ready':
-  //       setReady(true);
-  //       break;
-  //     case 'complete':
-  //       setLastCompleteMessage(e);
-  //       break;
-  //   }
-  // };
 
   const onClickPause = () => {
     setIsPaused(!isPaused);
