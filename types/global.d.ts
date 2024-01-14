@@ -9,6 +9,7 @@ declare global {
 
   type TextPassage = {
     index: number
+    passageIndex: number
     segmentIndex: number
     passage: string
     author: string

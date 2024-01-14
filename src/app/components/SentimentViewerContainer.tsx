@@ -101,7 +101,8 @@ export default function SentimentViewer({ passageArray, isLoading }: SentimentVi
           }
         } else if (lastCompleteMessage.data.segments) {
           currentP = {
-            index: lastCompleteMessage.data.pIndex,
+            index: lastCompleteMessage.data.totalSegments,
+            passageIndex: lastCompleteMessage.data.pIndex,
             segmentIndex: totalSegments,
             passage: lastCompleteMessage.data.segments[lastCompleteMessage.data.cIndex].segment,
             author: passageArray[lastCompleteMessage.data.pIndex].author,

@@ -10,7 +10,7 @@ export default function Tooltip({
   return (
     <span
         className={className}>
-        "{ textPassage.passage }" has label { textPassage.sentiment.label }, score { textPassage.sentiment.score }, and is segment #{ textPassage.segmentIndex+1 } in passage #{ textPassage.index+1 }.
+        "{ textPassage.passage }" has label { textPassage.sentiment.label }, score { textPassage.sentiment.score }, and is segment #{ textPassage.segmentIndex+1 } in passage #{ textPassage.passageIndex+1 }.
     </span>
   );
 };

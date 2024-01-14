@@ -24,6 +24,7 @@ export const getPassagesArrayFromRawTextArray = (sArray: string[], a: string): T
   return sArray.map((el, i) => {
     return {
       index: i,
+      passageIndex: i,
       segmentIndex: -1,
       passage: el,
       author: a,
