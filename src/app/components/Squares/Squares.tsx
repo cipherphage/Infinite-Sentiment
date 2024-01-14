@@ -155,7 +155,7 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
               Score: { (selectedPassage.sentiment.score * 100).toFixed(2) + "%"}.
             </h4>
             <h4>
-              From passage #{selectedPassage.index}.
+              From segment #{ selectedPassage.index+1 } in passage #{ selectedPassage.passageIndex+1 }.
             </h4>
           </div>
           
