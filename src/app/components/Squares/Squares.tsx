@@ -160,7 +160,7 @@ export default function Squares({ updatedPassage, updatedPassageArray }: SquareP
           </div>
           
           <Button
-            onClickCallback={(e) => onNextClick(e, false)}
+            onClickCallback={(e) => onNextClick(e, true)}
             buttonText={null}
             buttonSymbol="greaterthan" />
         </div>
